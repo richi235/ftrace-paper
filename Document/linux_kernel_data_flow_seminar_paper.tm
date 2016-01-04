@@ -243,7 +243,7 @@
   without any filtering use:
 
   <big-figure|<verbatim|trace-cmd record -p function_graph >|Example: Start
-  tracing of all function calls in Linux kernel>
+  tracing of all function calls in Linux kernel <cite|trace-cmd-record>>
 
   This writes all the results into a trace.dat in your working directory.
   <verbatim|record> is one of the several sub-commands of trace-cmd, in our
@@ -285,7 +285,7 @@
 
   <big-figure|<verbatim|trace-cmd -p function_graph -P
   \<less\>pid\<gtr\>>|Tracing all in-kernel function calls happening on
-  behalf of \<less\>pid\<gtr\>>
+  behalf of \<less\>pid\<gtr\><cite|trace-cmd-record>>
 
   This way, the log file sizes are much smaller and more focused than
   previously. Tracing netcat for some time, while sending and receiving 3
@@ -710,7 +710,7 @@
   <new-page>
 
   <\bibliography|bib|tm-plain|bibliography.bib>
-    <\bib-list|8>
+    <\bib-list|9>
       <bibitem*|1><label|bib-benvenuti2006>Christian Benvenuti.<newblock>
       <with|font-shape|italic|Understanding Linux network
       internals>.<newblock> O'Reilly, Sebastapol, Calif, 2006.<newblock>
@@ -740,11 +740,15 @@
       Theory>.<newblock> Books for professionals by professionals. Apress,
       2013.<newblock>
 
-      <bibitem*|7><label|bib-tanenbaum2003computer>Andrew<nbsp>S
+      <bibitem*|7><label|bib-trace-cmd-record>Steven<nbsp>Rostedt .<newblock>
+      <with|font-shape|italic|Trace-cmd-record(1) Linux Manpage>.<newblock>
+      2010.<newblock>
+
+      <bibitem*|8><label|bib-tanenbaum2003computer>Andrew<nbsp>S
       Tanenbaum.<newblock> Computer networks, 4-th edition.<newblock>
       <with|font-shape|italic|Ed: Prentice Hall>, 2003.<newblock>
 
-      <bibitem*|8><label|bib-wu2007performance>Wenji Wu, Matt
+      <bibitem*|9><label|bib-wu2007performance>Wenji Wu, Matt
       Crawford<localize|, and >Mark Bowden.<newblock> The performance
       analysis of linux networking\Upacket receiving.<newblock>
       <with|font-shape|italic|Computer Communications>, 30(5):1044\U1057,
@@ -916,6 +920,32 @@
         <db-field|url|https://www.kernel.org/doc/Documentation/trace/ftrace-design.txt>
       </db-entry>
 
+      <\db-entry|+5QNKrV01NOxbpk|manual|trace-cmd-record>
+        <db-field|newer|+5QNKrV01NOxbpj>
+
+        <db-field|contributor|richi>
+
+        <db-field|modus|imported>
+
+        <db-field|date|1451949630>
+      <|db-entry>
+        <db-field|title|trace-cmd-record(1) Linux Manpage>
+
+        <db-field|author|Steven Rostedt>
+
+        <db-field|year|2010>
+
+        <db-field|%organization|>
+
+        <db-field|%address|>
+
+        <db-field|%edition|>
+
+        <db-field|%month|July>
+
+        <db-field|%note|>
+      </db-entry>
+
       <\db-entry|+5QNKrV01NOxbph|article|tanenbaum2003computer>
         <db-field|contributor|richi>
 
@@ -938,20 +968,20 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|2>>
-    <associate|auto-10|<tuple|3|4>>
+    <associate|auto-10|<tuple|3|5>>
     <associate|auto-11|<tuple|3.3|5>>
     <associate|auto-12|<tuple|4|5>>
     <associate|auto-13|<tuple|4|5>>
     <associate|auto-14|<tuple|4.1|5>>
-    <associate|auto-15|<tuple|4.2|5>>
-    <associate|auto-16|<tuple|5|5>>
-    <associate|auto-17|<tuple|6|6>>
-    <associate|auto-18|<tuple|5|7>>
-    <associate|auto-19|<tuple|5.1|7>>
+    <associate|auto-15|<tuple|4.2|6>>
+    <associate|auto-16|<tuple|5|7>>
+    <associate|auto-17|<tuple|6|7>>
+    <associate|auto-18|<tuple|5|8>>
+    <associate|auto-19|<tuple|5.1|8>>
     <associate|auto-2|<tuple|2|3>>
-    <associate|auto-20|<tuple|5.2|8>>
-    <associate|auto-21|<tuple|6|8>>
-    <associate|auto-22|<tuple|8|9>>
+    <associate|auto-20|<tuple|5.2|9>>
+    <associate|auto-21|<tuple|6|9>>
+    <associate|auto-22|<tuple|8|10>>
     <associate|auto-23|<tuple|8|9>>
     <associate|auto-24|<tuple|8|10>>
     <associate|auto-25|<tuple|8|8>>
@@ -984,9 +1014,10 @@
     <associate|bib-love2010linux|<tuple|4|10>>
     <associate|bib-man-tcp|<tuple|1|4>>
     <associate|bib-rosen2013linux|<tuple|6|10>>
-    <associate|bib-tanenbaum2003computer|<tuple|7|10>>
+    <associate|bib-tanenbaum2003computer|<tuple|8|10>>
+    <associate|bib-trace-cmd-record|<tuple|7|10>>
     <associate|bib-tuntap-linux|<tuple|2|4>>
-    <associate|bib-wu2007performance|<tuple|8|10>>
+    <associate|bib-wu2007performance|<tuple|9|10>>
     <associate|fig_buffers|<tuple|1|3>>
     <associate|figure_3|<tuple|4|7>>
     <associate|footnote-1|<tuple|1|2>>
@@ -1029,6 +1060,10 @@
 
       ftrace-design-linux
 
+      trace-cmd-record
+
+      trace-cmd-record
+
       rosen2013linux
 
       wu2007performance
@@ -1039,25 +1074,27 @@
 
       tanenbaum2003computer
 
+      rosen2013linux
+
       ftrace-linux
     </associate>
     <\associate|figure>
       <tuple|normal|Buffers and Copying in the Linux Kernel|<pageref|auto-4>>
 
       <tuple|normal|Example: Start tracing of all function calls in Linux
-      kernel|<pageref|auto-10>>
+      kernel [<write|bib|trace-cmd-record><reference|bib-trace-cmd-record>]|<pageref|auto-9>>
 
       <tuple|normal|Converting the Results into an human readable
-      format.|<pageref|auto-11>>
+      format.|<pageref|auto-10>>
 
       <tuple|normal|Tracing all in-kernel function calls happening on behalf
-      of \<less\>pid\<gtr\>|<pageref|auto-13>>
+      of \<less\>pid\<gtr\>[<write|bib|trace-cmd-record><reference|bib-trace-cmd-record>]|<pageref|auto-12>>
 
       <tuple|normal|Sending a TCP packet, simplified kernel trace
-      result|<pageref|auto-18>>
+      result|<pageref|auto-16>>
 
       <tuple|normal|Receiving a TCP packet complete kernel trace
-      results|<pageref|auto-19>>
+      results|<pageref|auto-17>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Motivation
@@ -1075,10 +1112,10 @@
 
       <with|par-left|<quote|1tab>|2.2<space|2spc>The \Pkernel_flow\Q article
       in the official Linux Foundation Documentation<assign|footnote-nr|2><hidden|<tuple>><\float|footnote|>
-        <with|font-size|<quote|0.771>|<with|par-mode|<quote|justify>|par-left|<quote|0cm>|par-right|<quote|0cm>|font-shape|<quote|right>|dummy|<quote|<macro|<tex-footnote-sep>>>|dummy|<quote|<macro|<tex-footnote-tm-barlen>>>|<\surround|<locus|<id|%722EF68-45007A0>|<link|hyperlink|<id|%722EF68-45007A0>|<url|#footnr-2>>|2>.
+        <with|font-size|<quote|0.771>|<with|par-mode|<quote|justify>|par-left|<quote|0cm>|par-right|<quote|0cm>|font-shape|<quote|right>|dummy|<quote|<macro|<tex-footnote-sep>>>|dummy|<quote|<macro|<tex-footnote-tm-barlen>>>|<\surround|<locus|<id|%3A9C048-45007A0>|<link|hyperlink|<id|%3A9C048-45007A0>|<url|#footnr-2>>|2>.
         |<hidden|<tuple|footnote-2>><htab|0fn|first>>
           See: http://www.linuxfoundation.org/collaborate/workgroups/networking/kernel_flow
-          or use <locus|<id|%722EF68-4501A48>|<link|hyperlink|<id|%722EF68-4501A48>|<url|http://www.linuxfoundation.org/collaborate/workgroups/networking/kernel_flow>>|pdf-href>
+          or use <locus|<id|%3A9C048-4501A48>|<link|hyperlink|<id|%3A9C048-4501A48>|<url|http://www.linuxfoundation.org/collaborate/workgroups/networking/kernel_flow>>|pdf-href>
         </surround>>>
       </float><space|0spc><rsup|<with|font-shape|<quote|right>|<reference|footnote-2>>>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
@@ -1088,58 +1125,50 @@
       the Measuring Method: ftrace> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6><vspace|0.5fn>
 
-      <with|par-left|<quote|1tab>|3.1<space|2spc>About ftrace
+      <with|par-left|<quote|1tab>|3.1<space|2spc>About Tracing and Ftrace
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
 
-      <with|par-left|<quote|2tab>|3.1.1<space|2spc>What is tracing and ftrace
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|3.2<space|2spc>A Short Overview of ftrace
+      Capabilities and Usage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-8>>
 
-      <with|par-left|<quote|2tab>|3.1.2<space|2spc>A Short Overview of ftrace
-      Capabilities and Usage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>>
-
-      <with|par-left|<quote|2tab>|3.1.3<space|2spc>Filtering
+      <with|par-left|<quote|1tab>|3.3<space|2spc>Filtering
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
-
-      <with|par-left|<quote|1tab>|3.2<space|2spc>Why ftrace? Comparison to
-      other Measurement Methods <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-14>>
+      <no-break><pageref|auto-11>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|4<space|2spc>Test
       Setup and Results> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-15><vspace|0.5fn>
+      <no-break><pageref|auto-13><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|4.1<space|2spc>Test Setup
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-16>>
+      <no-break><pageref|auto-14>>
 
       <with|par-left|<quote|1tab>|4.2<space|2spc>Test results
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-17>>
+      <no-break><pageref|auto-15>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Evaluation
       and Discussion of the Trace Results>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-20><vspace|0.5fn>
+      <no-break><pageref|auto-18><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|5.1<space|2spc>Send Flow
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-21>>
+      <no-break><pageref|auto-19>>
 
       <with|par-left|<quote|1tab>|5.2<space|2spc>Receive Flow
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-22>>
+      <no-break><pageref|auto-20>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|6<space|2spc>Conclusion>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-23><vspace|0.5fn>
+      <no-break><pageref|auto-21><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Bibliography>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-24><vspace|0.5fn>
+      <no-break><pageref|auto-22><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
