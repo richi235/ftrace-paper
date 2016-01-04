@@ -76,20 +76,20 @@
 
   <abstract-data|<\abstract>
     Books on Linux kernel programming grow old quite fast since the Linux
-    Kernel is a very active project. Additionaly most of them are quite
-    expensive or dificult to obtain, and have either a quite broad or very
+    Kernel is a very active project. Additionally most of them are quite
+    expensive or difficult to obtain, and have either a quite broad or very
     focused character, making them less valuable for a aspiring and learning
     kernel developer.
 
     This seminar paper outlines the usage of ftrace a tracing framework to
-    analyse a running Linux system. Having obtained a tracelog a kernel
+    analyse a running Linux system. Having obtained a trace-log a kernel
     hacker can read and understand source code more determined and with
     context.
 
     In a detailed example this approach is demonstrated in tracing and the
-    way of data in a TCP Connection through the kernel. Finally this tracelog
-    is used as base for more a exact conceptual exploration and description
-    of the Linux TCP/IP implemention.\ 
+    way of data in a TCP Connection through the kernel. Finally this
+    trace-log is used as base for more a exact conceptual exploration and
+    description of the Linux TCP/IP implementation.
   </abstract>>
 
   Copyright <copyright> 2016 Richard Sailer.\ 
@@ -163,7 +163,7 @@
   <section|State of Research and Related Work>
 
   The following two papers and Linux kernel documentation documents cover
-  relatedtopics.
+  related topics.
 
   <subsection|The performance analysis of Linux networking--packet
   receiving<cite|wu2007performance>>
@@ -230,7 +230,7 @@
 
   <subsection|A Short Overview of ftrace Capabilities and Usage>
 
-  Ftrace can be used and controled via the <em|trace-cmd> program.
+  Ftrace can be used and controlled via the <em|trace-cmd> program.
   <em|trace-cmd> is packaged and available in all big Linux
   distributions.<\footnote>
     At the time of this writing (03.01.2016) <em|trace-cmd> is available in
@@ -248,7 +248,7 @@
   This writes all the results into a trace.dat in your working directory.
   <verbatim|record> is one of the several sub-commands of trace-cmd, in our
   examples and later measurements only the <verbatim|record> and the
-  <verbatim|report> sub-commands are needed. You shouldn't't run this command
+  <verbatim|report> sub-commands are needed. You shouldn't run this command
   (in the unfiltered version) too long, since it produces quite big files,
   about 900 MB after 30 seconds of tracing appeared in all tests using
   unfiltered tracing.
@@ -594,33 +594,33 @@
   Since this trace log alone is only semi-illuminating, in the following
   section we will explain what happens during these function calls, to give
   some overview. If not noted otherwise the source for these descriptions are
-  the function definitions in the linux source code in the stable version
+  the function definitions in the Linux source code in the stable version
   4.3.1.
 
   <subsection|Send Flow>
 
   For a better understanding the whole TCP send sequence can be split up into
-  5 sub-sequences which we will cover and explain seperately. The 5 sequences
+  5 sub-sequences which we will cover and explain separately. The 5 sequences
   are: (1) <em|copy-to-kernelspace>, (2) <em|tcp-processing>, (3)
   <em|ip-and-netfilter-processing>, (4) <em|ethernet-and-driver-processing>,
   (5) <em|finishing-works>.
 
   <em|copy-to-kernelspace>: This happens between the invocation of the
-  <verbatim|write()>-syscall in the userspace and the in kernel function
+  <verbatim|write()>-syscall in the user space and the in kernel function
   <verbatim|sock_sendmsg()>. <verbatim|SyS_write()> handles the write()
-  systemcall from userspace and initiates the copying of the data in the
-  userspace buffer to the kernelspace. This copying is a expensive
+  system-call from user space and initiates the copying of the data in the
+  user space buffer to the kernelspace. This copying is a expensive
   operation<cite|rosen2013linux>.
 
   <em|tcp-processing>: This happens between <verbatim|tcp_sendmsg()> and
-  <verbatim|ip_queue_xmit()>. Here the checksums are callculated and the TCP
+  <verbatim|ip_queue_xmit()>. Here the check-sums are calculated and the TCP
   Header is built, this all happens using the <em|socket buffer> <em|skb> the
-  central data structure of linux networking. For the <em|skb> there exist
+  central data structure of Linux networking. For the <em|skb> there exist
   several utility functions like <verbatim|skb_clone()> or
   <verbatim|skb_push()> it's important to understand, that
   <verbatim|skb_clone()> does not copy the entire data structure but only
-  header and managment info, since the data is referenced thorough a pointer,
-  so only this pointer gets copied.
+  header and management info, since the data is referenced thorough a
+  pointer, so only this pointer gets copied.
 
   <em|ip-and-netfilter-processing:> This happens between
   <verbatim|ip_queue_xmit()> and <verbatim|ip_finish_output2()>. Here several
@@ -644,13 +644,13 @@
 
   <em|finishing-works:> This happens between
   <verbatim|tcp_event_new_data_sent()> and <verbatim|fsnotify()>. Remember
-  that this is the path of a succesfull transmission, the
+  that this is the path of a successful transmission, the
   <verbatim|tcp_rearm_rto()> function is only called after an ACK packet is
-  recieved. Here the <em|Retransmission Timout> (<em|RTO>) and the
-  <em|Congestion Window> (cwnd) get adjusted according to the succesfull
+  received. Here the <em|Retransmission Timeout> (<em|RTO>) and the
+  <em|Congestion Window> (cwnd) get adjusted according to the successful
   transmission, for details of the TCP logic see the TCP section of
   <cite|tanenbaum2003computer>. At last the filesystem is notified since on
-  linux there exists an inode for every tcp-socket (in a own namespace
+  Linux there exists an inode for every tcp-socket (in a own namespace
   tough).
 
   <subsection|Receive Flow>
@@ -659,25 +659,25 @@
   two sub-sequences suffices for understanding. They are the (1)
   <em|copy-to-userspace> and the (2) <em|tcp-processing> sequences.\ 
 
-  <em|copy-to-userspace>: This happens before and ofter the
+  <em|copy-to-userspace>: This happens before and after the
   <em|tcp-processing> sequence, it can be said the <em|copy-to-userspace>
   section is split up, with the <em|tcp-processing> sequence between. The
   first slice starts from the systemcall in userspace end ends at
   <verbatim|sock_read_iter()>. The second slice starts at
   <verbatim|tcp_release_sock()> and ends with <verbatim|fsnotify()>. This
   sequence first allocates data structures for the data and manages locking,
-  then fetches the data form TCP and finally copys the data to userspace,
-  deallocates the data structures used and notices the filesystem, comparable
-  to the send flow.
+  then fetches the data form TCP and finally copies the data to userspace,
+  de-allocates the data structures used and notices the filesystem,
+  comparable to the send flow.
 
   <em|tcp-processing>: This happens between <verbatim|sock_recvmsg()> and
   <verbatim|tcp_cleanup_rbuf()>. Here pointers to the data are copied from
   the <em|socket buffer> handled by the tcp stack, and finally the <em|skb>
-  of the tcp insternals gets freed. Additionally the
+  of the tcp internals gets freed. Additionally the
   <verbatim|tcp_rcv_space_adjust()> call updates the <verbatim|rmem> value of
   the TCP receive buffer. The reason this sequence is so short and there are
   no ip-processing calls, is that the IP processing has already happened
-  asynchronously when the packet arrvived and is no longer necesarry to be
+  asynchronously when the packet arrived and is no longer necessary to be
   done on behalf of the netcat process, therefore it was not
   traced.<cite|rosen2013linux>
 
