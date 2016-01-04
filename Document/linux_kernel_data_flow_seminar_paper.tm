@@ -279,11 +279,6 @@
   previously. Tracing netcat for some time, while sending and receiving 3
   small text messages produced a trace log file of 2,3 MB.
 
-  <subsection|Why ftrace? Comparison to other Measurement Methods>
-
-  Why did we choose ftrace? There are several tools for analysing and
-  understanding what happens inside the Linux kernel.\ 
-
   <section|Test Setup and Results>
 
   <subsection|Test Setup>
