@@ -655,7 +655,31 @@
 
   <subsection|Receive Flow>
 
-  \;
+  The receive sequence is much more overseeable, here the fragmentation in
+  two sub-sequences suffices for understanding. They are the (1)
+  <em|copy-to-userspace> and the (2) <em|tcp-processing> sequences.\ 
+
+  <em|copy-to-userspace>: This happens before and ofter the
+  <em|tcp-processing> sequence, it can be said the <em|copy-to-userspace>
+  section is split up, with the <em|tcp-processing> sequence between. The
+  first slice starts from the systemcall in userspace end ends at
+  <verbatim|sock_read_iter()>. The second slice starts at
+  <verbatim|tcp_release_sock()> and ends with <verbatim|fsnotify()>. This
+  sequence first allocates data structures for the data and manages locking,
+  then fetches the data form TCP and finally copys the data to userspace,
+  deallocates the data structures used and notices the filesystem, comparable
+  to the send flow.
+
+  <em|tcp-processing>: This happens between <verbatim|sock_recvmsg()> and
+  <verbatim|tcp_cleanup_rbuf()>. Here pointers to the data are copied from
+  the <em|socket buffer> handled by the tcp stack, and finally the <em|skb>
+  of the tcp insternals gets freed. Additionally the
+  <verbatim|tcp_rcv_space_adjust()> call updates the <verbatim|rmem> value of
+  the TCP receive buffer. The reason this sequence is so short and there are
+  no ip-processing calls, is that the IP processing has already happened
+  asynchronously when the packet arrvived and is no longer necesarry to be
+  done on behalf of the netcat process, therefore it was not
+  traced.<cite|rosen2013linux>
 
   <section|Conclusion>
 
