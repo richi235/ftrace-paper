@@ -582,66 +582,79 @@
     trace results>
   </with>
 
-  <section|Evaluation and Discussion of the Results>
+  <section|Evaluation and Discussion of the Trace Results>
 
   <subsection|Send Flow>
 
-  Assuming a TCP connection is already established and we have a socket for
-  sending data in our program. Before the TCP implementation of the kernel
-  can process and send the data, it has to get the data from user space, the
-  next two subsections will cover how this handing over happens and how the
-  kernel will process the data.
+  For a better understanding the whole TCP send sequence can be split up into
+  5 sub-sequences which we will cover and explain seperately. The 5 sequences
+  are: (1) <em|copy-to-kernelspace>, (2) <em|tcp-processing>, (3)
+  <em|ip-and-netfilter-processing>, (4) <em|ethernet-and-driver-processing>,
+  (5) <em|finishing-works>. Each of these sub-sequences will be explained in
+  one paragraph.
 
-  <subsubsection|Syscalls and Kernel Entry>
+  <em|copy-to-kernelspace>: This happens between the invocation of the
+  <verbatim|write()>-syscall in the userspace and the in kernel function
+  <verbatim|sock_sendmsg()>. <verbatim|SyS_write()> handles the write()
+  systemcall from userspace and initiates the copying of the data in the
+  userspace buffer to the kernelspace. This copying is a expensive
+  operation<cite|rosen2013linux>.
 
-  There are 4<\footnote>
-    Actually there are 6, but <verbatim|writev()> and <verbatim|fwrite()> are
-    not mentioned separately because from a kernel developer point of view
-    they are similar to the discussed ones. (See main text, below
-    enumeration).
-  </footnote> syscalls available for sending data through a TCP socket,
-  namely:
+  <em|tcp-processing>: This happens between <verbatim|tcp_sendmsg()> and
+  <verbatim|ip_queue_xmit()>. Here the checksums are callculated and the TCP
+  Header is built, this all happens using the <em|socket buffer> <em|skb> the
+  central data structure of linux networking. For the <em|skb> there exist
+  several utility functions like <verbatim|skb_clone()> or
+  <verbatim|skb_push()> it's important to understand, that
+  <verbatim|skb_clone()> does not copy the entire data structure but only
+  header and managment info, since the data is referenced thorough a pointer,
+  so only this pointer gets copied.
 
-  <\with|par-columns|2>
-    <\itemize>
-      <item>write()
+  <em|ip-and-netfilter-processing:> This happens between
+  <verbatim|ip_queue_xmit()> and <verbatim|ip_finish_output2()>. Here several
+  things happen:
 
-      <item>send()
+  <\enumerate>
+    <item>The IP packet and header is built
 
-      <item>sendto()
+    <item>The routing decision is made
 
-      <item>sendmsg()
-    </itemize>
-  </with>
+    <item>Firewall and forwarding rules of netfilter are applied (This
+    happens in <verbatim|nf_hook_slow()> and involves many function calls,
+    most of them where cut out because netfilter is beyond the scope of this
+    work).
+  </enumerate>
 
-  They all need a file handle to the socket and a pointer to the
-  send-data-buffer as arguments. They differ in the number of additional
-  parameters and the fact that sendmsg() needs a more complex
-  <verbatim|msghdr> data structure for the input data instead of a simple
-  buffer.\ 
+  <em|ethernet-and-driver-processing:> This happens between
+  <verbatim|ip_finish_output2()> and <verbatim|e1000_xmit_frame()>. At first
+  the whole socket buffer is copied to the network interface (see
+  <cite|wu2007performance> for a detailed description of this process). It
+  depends on the network device and the driver if the device has a own buffer
+  or uses the main memory via DMA. <cite|wu2007performance>
+  <cite|rosen2013linux> Then the <em|skb> used by the IP sub-sequence gets
+  freed using <verbatim|skb_release_all()> and finally
+  <verbatim|kfree_skbmem()>. Finally the packet is transmitted using
+  <verbatim|e1000_xmit_frame()>, which is a device-driver specific function
+  of the Intel e1000 network card of the test computer.
 
-  <subsubsection|In Kernel Flow>
+  <em|finishing-works:> This happens between
+  <verbatim|tcp_event_new_data_sent()> and <verbatim|fsnotify()>. Remember
+  that this is the path of a succesfull transmission, the
+  <verbatim|tcp_rearm_rto()> function is only called after an ACK packet is
+  recieved. Here the <em|Retransmission Timout> (<em|RTO>) and the
+  <em|Congestion Window> (cwnd) get adjusted according to the succesfull
+  transmission, for details of the TCP logic see the TCP section of
+  <cite|tanenbaum2003computer>. At least the filesystem is notified since on
+  linux there exists an inode for every tcp-socket (in a own namespace tough)
+  through which managment info can be read, which has to be kept up to date.
+
+  \;
+
+  \;
 
   <subsection|Receive Flow>
 
-  <subsubsection|Syscalls and Kernel Entry>
-
-  From user space there are several entry points to the kernel for receiving
-  data:
-
-  <\with|par-columns|2>
-    <\itemize>
-      <item>read()
-
-      <item>recv()
-
-      <item>recvfrom()
-
-      <item>recvmsg()
-    </itemize>
-  </with>
-
-  <subsubsection|In Kernel Flow>
+  \;
 
   <section|Conclusion>
 
@@ -672,12 +685,16 @@
   <new-page>
 
   <\bibliography|bib|tm-plain|bibliography.bib>
-    <\bib-list|7>
+    <\bib-list|8>
       <bibitem*|1><label|bib-benvenuti2006>Christian Benvenuti.<newblock>
       <with|font-shape|italic|Understanding Linux network
       internals>.<newblock> O'Reilly, Sebastapol, Calif, 2006.<newblock>
 
-      <bibitem*|2><label|bib-Kraft1911>Johan Kraft, Anders Wall<localize|,
+      <bibitem*|2><label|bib-ftrace-design-linux>Mike Frysinger.<newblock>
+      Function tracer guts.<newblock> Doc-file in Linux source tree:
+      linux/Documentation/trace/ftrace-design.txt.<newblock>
+
+      <bibitem*|3><label|bib-Kraft1911>Johan Kraft, Anders Wall<localize|,
       and >Holger Kienle.<newblock> Trace recording for embedded systems:
       lessons learned from five industrial projects.<newblock> <localize|In
       ><with|font-shape|italic|Proceedings of the First International
@@ -685,24 +702,24 @@
       Notes in Computer Science), November 2010.<newblock> Original
       publication is available at www.springerlink.com.<newblock>
 
-      <bibitem*|3><label|bib-love2010linux>Robert Love.<newblock>
+      <bibitem*|4><label|bib-love2010linux>Robert Love.<newblock>
       <with|font-shape|italic|Linux kernel development>.<newblock>
       Addison-Wesley, Upper Saddle River, NJ, 2010.<newblock>
 
-      <bibitem*|4><label|bib-ftrace-design-linux>Mike<nbsp>Frysinger
-      .<newblock> Function tracer guts.<newblock> Doc-file in Linux source
-      tree: linux/Documentation/trace/ftrace-design.txt.<newblock>
+      <bibitem*|5><label|bib-ftrace-linux>Steven Rostedt.<newblock> Ftrace -
+      function tracer.<newblock> Doc-file in Linux source tree:
+      linux/Documentation/trace/ftrace.txt.<newblock>
 
-      <bibitem*|5><label|bib-rosen2013linux>R.<nbsp>Rosen.<newblock>
+      <bibitem*|6><label|bib-rosen2013linux>R.<nbsp>Rosen.<newblock>
       <with|font-shape|italic|Linux Kernel Networking: Implementation and
       Theory>.<newblock> Books for professionals by professionals. Apress,
       2013.<newblock>
 
-      <bibitem*|6><label|bib-ftrace-linux>Steven<nbsp>Rostedt .<newblock>
-      Ftrace - function tracer.<newblock> Doc-file in Linux source tree:
-      linux/Documentation/trace/ftrace.txt.<newblock>
+      <bibitem*|7><label|bib-tanenbaum2003computer>Andrew<nbsp>S
+      Tanenbaum.<newblock> Computer networks, 4-th edition.<newblock>
+      <with|font-shape|italic|Ed: Prentice Hall>, 2003.<newblock>
 
-      <bibitem*|7><label|bib-wu2007performance>Wenji Wu, Matt
+      <bibitem*|8><label|bib-wu2007performance>Wenji Wu, Matt
       Crawford<localize|, and >Mark Bowden.<newblock> The performance
       analysis of linux networking\Upacket receiving.<newblock>
       <with|font-shape|italic|Computer Communications>, 30(5):1044\U1057,
@@ -723,12 +740,12 @@
 <\attachments>
   <\collection>
     <\associate|bib-bibliography>
-      <\db-entry|+HwYzixBDVcj5K3|book|love2010linux>
+      <\db-entry|+5QNKrV01NOxbpa|book|love2010linux>
         <db-field|contributor|richi>
 
         <db-field|modus|imported>
 
-        <db-field|date|1448883688>
+        <db-field|date|1451940966>
       <|db-entry>
         <db-field|author|Robert <name|Love>>
 
@@ -743,12 +760,12 @@
         <db-field|isbn|978-0672329463>
       </db-entry>
 
-      <\db-entry|+HwYzixBDVcj5K4|book|benvenuti2006>
+      <\db-entry|+5QNKrV01NOxbpX|book|benvenuti2006>
         <db-field|contributor|richi>
 
         <db-field|modus|imported>
 
-        <db-field|date|1448885760>
+        <db-field|date|1451940966>
       <|db-entry>
         <db-field|author|Christian <name|Benvenuti>>
 
@@ -763,12 +780,12 @@
         <db-field|isbn|978-0596002558>
       </db-entry>
 
-      <\db-entry|+FRCTJ7uPE2eqFS|book|rosen2013linux>
+      <\db-entry|+5QNKrV01NOxbpU|book|rosen2013linux>
         <db-field|contributor|richi>
 
         <db-field|modus|imported>
 
-        <db-field|date|1451815582>
+        <db-field|date|1451940966>
       <|db-entry>
         <db-field|author|R. <name|Rosen>>
 
@@ -785,12 +802,12 @@
         <db-field|url|https://books.google.de/books?id=96V4AgAAQBAJ>
       </db-entry>
 
-      <\db-entry|+UI30lmjpi2qkC4|article|wu2007performance>
+      <\db-entry|+5QNKrV01NOxbpW|article|wu2007performance>
         <db-field|contributor|richi>
 
         <db-field|modus|imported>
 
-        <db-field|date|1451534852>
+        <db-field|date|1451940966>
       <|db-entry>
         <db-field|author|Wenji <name|Wu><name-sep>Matt
         <name|Crawford><name-sep>Mark <name|Bowden>>
@@ -811,16 +828,14 @@
         <db-field|publisher|Elsevier>
       </db-entry>
 
-      <\db-entry|+DOFjyv9YwrAHfy|misc|ftrace-linux>
-        <db-field|newer|+DOFjyv9YwrAHfw>
-
+      <\db-entry|+5QNKrV01NOxbpS|misc|ftrace-linux>
         <db-field|contributor|richi>
 
         <db-field|modus|imported>
 
-        <db-field|date|1448786418>
+        <db-field|date|1451940966>
       <|db-entry>
-        <db-field|author|Steven Rostedt>
+        <db-field|author|Steven <name|Rostedt>>
 
         <db-field|title|Ftrace - function tracer>
 
@@ -830,12 +845,12 @@
         <db-field|url|https://www.kernel.org/doc/Documentation/trace/ftrace.txt>
       </db-entry>
 
-      <\db-entry|+DOFjyv9YwrAHg0|inproceedings|Kraft1911>
+      <\db-entry|+5QNKrV01NOxbpY|inproceedings|Kraft1911>
         <db-field|contributor|richi>
 
         <db-field|modus|imported>
 
-        <db-field|date|1448787119>
+        <db-field|date|1451940966>
       <|db-entry>
         <db-field|author|Johan <name|Kraft><name-sep>Anders
         <name|Wall><name-sep>Holger <name|Kienle>>
@@ -859,16 +874,14 @@
         <db-field|url|<slink|http://www.es.mdh.se/publications/1911->>
       </db-entry>
 
-      <\db-entry|+DOFjyv9YwrAHfz|misc|ftrace-design-linux>
-        <db-field|newer|+DOFjyv9YwrAHfx>
-
+      <\db-entry|+5QNKrV01NOxbpT|misc|ftrace-design-linux>
         <db-field|contributor|richi>
 
         <db-field|modus|imported>
 
-        <db-field|date|1448786418>
+        <db-field|date|1451940966>
       <|db-entry>
-        <db-field|author|Mike Frysinger>
+        <db-field|author|Mike <name|Frysinger>>
 
         <db-field|title|Function tracer guts>
 
@@ -876,6 +889,22 @@
         linux/Documentation/trace/ftrace-design.txt>
 
         <db-field|url|https://www.kernel.org/doc/Documentation/trace/ftrace-design.txt>
+      </db-entry>
+
+      <\db-entry|+5QNKrV01NOxbph|article|tanenbaum2003computer>
+        <db-field|contributor|richi>
+
+        <db-field|modus|imported>
+
+        <db-field|date|1451941012>
+      <|db-entry>
+        <db-field|author|Andrew S <name|Tanenbaum>>
+
+        <db-field|title|Computer networks, 4-th edition>
+
+        <db-field|journal|ed: Prentice Hall>
+
+        <db-field|year|2003>
       </db-entry>
     </associate>
   </collection>
@@ -897,11 +926,11 @@
     <associate|auto-2|<tuple|2|3>>
     <associate|auto-20|<tuple|5|8>>
     <associate|auto-21|<tuple|5.1|8>>
-    <associate|auto-22|<tuple|5.1.1|8>>
-    <associate|auto-23|<tuple|5.1.2|8>>
-    <associate|auto-24|<tuple|5.2|8>>
-    <associate|auto-25|<tuple|5.2.1|8>>
-    <associate|auto-26|<tuple|5.2.2|8>>
+    <associate|auto-22|<tuple|5.2|9>>
+    <associate|auto-23|<tuple|6|9>>
+    <associate|auto-24|<tuple|8|10>>
+    <associate|auto-25|<tuple|6|8>>
+    <associate|auto-26|<tuple|9|8>>
     <associate|auto-27|<tuple|6|8>>
     <associate|auto-28|<tuple|9|10>>
     <associate|auto-29|<tuple|6|8>>
@@ -922,16 +951,17 @@
     <associate|auto-7|<tuple|3.1|4>>
     <associate|auto-8|<tuple|3.1.1|4>>
     <associate|auto-9|<tuple|3.1.2|4>>
-    <associate|bib-Kraft1911|<tuple|2|10>>
+    <associate|bib-Kraft1911|<tuple|3|10>>
     <associate|bib-benvenuti2006|<tuple|1|10>>
     <associate|bib-chimata2005path|<tuple|2|12>>
-    <associate|bib-ftrace-design-linux|<tuple|4|10>>
-    <associate|bib-ftrace-linux|<tuple|6|10>>
-    <associate|bib-love2010linux|<tuple|3|10>>
+    <associate|bib-ftrace-design-linux|<tuple|2|10>>
+    <associate|bib-ftrace-linux|<tuple|5|10>>
+    <associate|bib-love2010linux|<tuple|4|10>>
     <associate|bib-man-tcp|<tuple|1|4>>
-    <associate|bib-rosen2013linux|<tuple|5|10>>
+    <associate|bib-rosen2013linux|<tuple|6|10>>
+    <associate|bib-tanenbaum2003computer|<tuple|7|10>>
     <associate|bib-tuntap-linux|<tuple|2|4>>
-    <associate|bib-wu2007performance|<tuple|7|10>>
+    <associate|bib-wu2007performance|<tuple|8|10>>
     <associate|fig_buffers|<tuple|1|3>>
     <associate|figure_3|<tuple|4|7>>
     <associate|footnote-1|<tuple|1|2>>
@@ -941,7 +971,7 @@
     <associate|footnote-5|<tuple|5|4>>
     <associate|footnote-6|<tuple|6|6>>
     <associate|footnote-7|<tuple|7|6>>
-    <associate|footnote-8|<tuple|8|8>>
+    <associate|footnote-8|<tuple|8|9>>
     <associate|footnote-9|<tuple|9|9>>
     <associate|footnr-1|<tuple|1|2>>
     <associate|footnr-2|<tuple|2|6>>
@@ -950,7 +980,7 @@
     <associate|footnr-5|<tuple|5|4>>
     <associate|footnr-6|<tuple|6|6>>
     <associate|footnr-7|<tuple|7|6>>
-    <associate|footnr-8|<tuple|8|8>>
+    <associate|footnr-8|<tuple|8|9>>
     <associate|footnr-9|<tuple|9|9>>
     <associate|recv-trace|<tuple|6|7>>
     <associate|send-trace|<tuple|5|7>>
@@ -974,18 +1004,28 @@
 
       ftrace-design-linux
 
+      rosen2013linux
+
+      wu2007performance
+
+      wu2007performance
+
+      rosen2013linux
+
+      tanenbaum2003computer
+
       ftrace-linux
     </associate>
     <\associate|figure>
       <tuple|normal|Buffers and Copying in the Linux Kernel|<pageref|auto-4>>
 
-      <tuple|normal|Example: Start tracing of all function calls in linux
+      <tuple|normal|Example: Start tracing of all function calls in Linux
       kernel|<pageref|auto-10>>
 
-      <tuple|normal|Converting the Results into an humen readable
+      <tuple|normal|Converting the Results into an human readable
       format.|<pageref|auto-11>>
 
-      <tuple|normal|Tracing all in-kernel function callls happening on behalf
+      <tuple|normal|Tracing all in-kernel function calls happening on behalf
       of \<less\>pid\<gtr\>|<pageref|auto-13>>
 
       <tuple|normal|Sending a TCP packet, simplified kernel trace
@@ -1009,7 +1049,7 @@
       <no-break><pageref|auto-3>>
 
       <with|par-left|<quote|1tab>|2.2<space|2spc>The \Pkernel_flow\Q article
-      in the official Linux Fundation Documentation<assign|footnote-nr|2><hidden|<tuple>><\float|footnote|>
+      in the official Linux Foundation Documentation<assign|footnote-nr|2><hidden|<tuple>><\float|footnote|>
         <with|font-size|<quote|0.771>|<with|par-mode|<quote|justify>|par-left|<quote|0cm>|par-right|<quote|0cm>|font-shape|<quote|right>|dummy|<quote|<macro|<tex-footnote-sep>>>|dummy|<quote|<macro|<tex-footnote-tm-barlen>>>|<\surround|<locus|<id|%3A9C048-45007A0>|<link|hyperlink|<id|%3A9C048-45007A0>|<url|#footnr-2>>|2>.
         |<hidden|<tuple|footnote-2>><htab|0fn|first>>
           See: http://www.linuxfoundation.org/collaborate/workgroups/networking/kernel_flow
@@ -1040,7 +1080,7 @@
       <no-break><pageref|auto-12>>
 
       <with|par-left|<quote|1tab>|3.2<space|2spc>Why ftrace? Comparison to
-      other Measurment Methods <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      other Measurement Methods <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-14>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|4<space|2spc>Test
@@ -1056,40 +1096,25 @@
       <no-break><pageref|auto-17>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Evaluation
-      and Discussion of the Results> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      and Discussion of the Trace Results>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-20><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|5.1<space|2spc>Send Flow
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-21>>
 
-      <with|par-left|<quote|2tab>|5.1.1<space|2spc>Syscalls and Kernel Entry
+      <with|par-left|<quote|1tab>|5.2<space|2spc>Receive Flow
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-22>>
 
-      <with|par-left|<quote|2tab>|5.1.2<space|2spc>In Kernel Flow
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-23>>
-
-      <with|par-left|<quote|1tab>|5.2<space|2spc>Recieve Flow
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-24>>
-
-      <with|par-left|<quote|2tab>|5.2.1<space|2spc>Syscalls and Kernel Entry
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-25>>
-
-      <with|par-left|<quote|2tab>|5.2.2<space|2spc>In Kernel Flow
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-26>>
-
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|6<space|2spc>Conclusion>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-27><vspace|0.5fn>
+      <no-break><pageref|auto-23><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Bibliography>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-28><vspace|0.5fn>
+      <no-break><pageref|auto-24><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
