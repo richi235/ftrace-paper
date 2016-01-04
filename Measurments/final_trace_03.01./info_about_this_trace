@@ -1,0 +1,16 @@
+The traces in these subdircetories contain the ftraces of a netcat process.
+One is tracing while sending 2 messages, the other one while recieving 2 messages.
+
+The terminal output of this netcat experiment was:
+
+root@yang ~# nc -l 1337
+hi
+lol
+hi
+send_test
+loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_meeeeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeesage
+recv_test
+loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_meeeeeeeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeesage
+

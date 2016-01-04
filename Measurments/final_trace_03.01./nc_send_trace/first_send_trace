@@ -1,0 +1,47 @@
+SyS_write() {
+__fdget_pos() [...]
+vfs_write() {
+rw_verify_area() [...]
+__vfs_write() {
+sock_write_iter() {
+sock_sendmsg() {
+inet_sendmsg() {
+tcp_sendmsg() {
+lock_sock_nested() [...]
+tcp_send_mss() [...]
+sk_stream_alloc_skb() [...]
+skb_entail() [...]
+skb_put();
+tcp_push() {
+__tcp_push_pending_frames() {
+tcp_write_xmit() {
+tcp_init_tso_segs();
+tcp_transmit_skb() {
+skb_clone() [...]
+skb_push();
+tcp_v4_send_check() [...]
+bictcp_cwnd_event();
+ip_queue_xmit() { ...
+skb_push();
+ip_local_out_sk() {
+__ip_local_out_sk() {
+ip_send_check();
+nf_hook_slow() [...]
+ip_output() {
+nf_hook_slow() [...]
+ip_finish_output() {
+ip_finish_output2() {
+skb_push();
+dev_queue_xmit_sk() {
+__dev_queue_xmit() {
+skb_clone() {
+kmem_cache_alloc();
+__skb_clone() {
+__copy_skb_header();
+tcp_event_new_data_sent() {
+tcp_rearm_rto() {
+tcp_rearm_rto.part.59() {
+sk_reset_timer() {
+mod_timer() [...]
+release_sock() {
+fsnotify();

@@ -1,0 +1,56 @@
+sys_read() {
+  __fdget_pos() {
+    __fget_light();
+  }
+  vfs_read() {
+    rw_verify_area() {
+      security_file_permission() {
+        __fsnotify_parent();
+        fsnotify();
+      }
+    }
+    __vfs_read() {
+      sock_read_iter() {
+        sock_recvmsg() {
+          security_socket_recvmsg();
+          inet_recvmsg() {
+            tcp_recvmsg() {
+              lock_sock_nested() {
+                _cond_resched();
+                _raw_spin_lock_bh();
+                __local_bh_enable_ip();
+              }
+              skb_copy_datagram_iter();
+              tcp_rcv_space_adjust();
+              __kfree_skb() {
+                skb_release_all() {
+                  skb_release_head_state() {
+                    sock_rfree();
+                  }
+                  skb_release_data() {
+                    kfree();
+                  }
+                }
+                kfree_skbmem() {
+                  kmem_cache_free();
+                }
+              }
+              tcp_cleanup_rbuf() {
+                __tcp_select_window();
+              }
+              release_sock() {
+                _raw_spin_lock_bh();
+                tcp_release_cb();
+                _raw_spin_unlock_bh() {
+                  __local_bh_enable_ip();
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    __fsnotify_parent();
+    fsnotify();
+  }
+}
