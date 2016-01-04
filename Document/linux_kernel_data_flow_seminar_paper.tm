@@ -334,7 +334,7 @@
   small enough to print the complete trace in this document. Contrastingly
   the send sequence comprised 510 lines, so shortening got necesarry. The
   shortening included removing most of the locking and mutex function calls.
-  Also in many cases where <verbatim|function()> , did some locking and then
+  Also many cases in which <verbatim|function()> , did some locking and then
   called <verbatim|__function()> for doing the internal work were simplified
   by only keeping the <verbatim|function()> call. As a last step, the
   indentation and superflous columns of both results were removed, so both
@@ -342,7 +342,11 @@
 
   The final simplified traces are visible in Figure <reference|send-trace>
   and Figure <reference|recv-trace>. The full and unedited trace results are
-  available via \ 
+  available via <\footnote>
+    github: https://github.com/richi235/ftrace-seminar-paper
+  </footnote> and <\footnote>
+    archive.org: https://archive.org/details/final_trace_03.01.tar as archive
+  </footnote>.
 
   <\with|par-columns|2>
     <big-figure|<\verbatim>
@@ -883,25 +887,25 @@
   <\collection>
     <associate|auto-1|<tuple|1|2>>
     <associate|auto-10|<tuple|2|4>>
-    <associate|auto-11|<tuple|3|4>>
+    <associate|auto-11|<tuple|3|5>>
     <associate|auto-12|<tuple|3.1.3|5>>
     <associate|auto-13|<tuple|4|5>>
     <associate|auto-14|<tuple|3.2|5>>
     <associate|auto-15|<tuple|4|5>>
     <associate|auto-16|<tuple|4.1|5>>
-    <associate|auto-17|<tuple|4.2|5>>
-    <associate|auto-18|<tuple|5|6>>
-    <associate|auto-19|<tuple|6|6>>
+    <associate|auto-17|<tuple|4.2|6>>
+    <associate|auto-18|<tuple|5|7>>
+    <associate|auto-19|<tuple|6|7>>
     <associate|auto-2|<tuple|2|3>>
-    <associate|auto-20|<tuple|5|7>>
-    <associate|auto-21|<tuple|5.1|7>>
-    <associate|auto-22|<tuple|5.1.1|7>>
-    <associate|auto-23|<tuple|5.1.2|7>>
-    <associate|auto-24|<tuple|5.2|7>>
-    <associate|auto-25|<tuple|5.2.1|7>>
-    <associate|auto-26|<tuple|5.2.2|7>>
-    <associate|auto-27|<tuple|6|9>>
-    <associate|auto-28|<tuple|7|8>>
+    <associate|auto-20|<tuple|5|8>>
+    <associate|auto-21|<tuple|5.1|8>>
+    <associate|auto-22|<tuple|5.1.1|8>>
+    <associate|auto-23|<tuple|5.1.2|8>>
+    <associate|auto-24|<tuple|5.2|8>>
+    <associate|auto-25|<tuple|5.2.1|8>>
+    <associate|auto-26|<tuple|5.2.2|8>>
+    <associate|auto-27|<tuple|6|8>>
+    <associate|auto-28|<tuple|9|10>>
     <associate|auto-29|<tuple|6|8>>
     <associate|auto-3|<tuple|2.1|3>>
     <associate|auto-30|<tuple|6|8>>
@@ -920,16 +924,16 @@
     <associate|auto-7|<tuple|3.1|4>>
     <associate|auto-8|<tuple|3.1.1|4>>
     <associate|auto-9|<tuple|3.1.2|4>>
-    <associate|bib-Kraft1911|<tuple|2|9>>
-    <associate|bib-benvenuti2006|<tuple|1|9>>
+    <associate|bib-Kraft1911|<tuple|2|10>>
+    <associate|bib-benvenuti2006|<tuple|1|10>>
     <associate|bib-chimata2005path|<tuple|2|12>>
-    <associate|bib-ftrace-design-linux|<tuple|4|9>>
-    <associate|bib-ftrace-linux|<tuple|6|9>>
-    <associate|bib-love2010linux|<tuple|3|9>>
+    <associate|bib-ftrace-design-linux|<tuple|4|10>>
+    <associate|bib-ftrace-linux|<tuple|6|10>>
+    <associate|bib-love2010linux|<tuple|3|10>>
     <associate|bib-man-tcp|<tuple|1|4>>
-    <associate|bib-rosen2013linux|<tuple|5|9>>
+    <associate|bib-rosen2013linux|<tuple|5|10>>
     <associate|bib-tuntap-linux|<tuple|2|4>>
-    <associate|bib-wu2007performance|<tuple|7|9>>
+    <associate|bib-wu2007performance|<tuple|7|10>>
     <associate|fig_buffers|<tuple|1|3>>
     <associate|figure_3|<tuple|4|7>>
     <associate|footnote-1|<tuple|1|2>>
@@ -937,17 +941,21 @@
     <associate|footnote-3|<tuple|3|9>>
     <associate|footnote-4|<tuple|4|3>>
     <associate|footnote-5|<tuple|5|4>>
-    <associate|footnote-6|<tuple|6|7>>
-    <associate|footnote-7|<tuple|7|8>>
+    <associate|footnote-6|<tuple|6|6>>
+    <associate|footnote-7|<tuple|7|6>>
+    <associate|footnote-8|<tuple|8|8>>
+    <associate|footnote-9|<tuple|9|9>>
     <associate|footnr-1|<tuple|1|2>>
     <associate|footnr-2|<tuple|2|6>>
     <associate|footnr-3|<tuple|3|9>>
     <associate|footnr-4|<tuple|4|3>>
     <associate|footnr-5|<tuple|5|4>>
-    <associate|footnr-6|<tuple|6|7>>
-    <associate|footnr-7|<tuple|7|8>>
-    <associate|recv-trace|<tuple|6|?>>
-    <associate|send-trace|<tuple|5|?>>
+    <associate|footnr-6|<tuple|6|6>>
+    <associate|footnr-7|<tuple|7|6>>
+    <associate|footnr-8|<tuple|8|8>>
+    <associate|footnr-9|<tuple|9|9>>
+    <associate|recv-trace|<tuple|6|7>>
+    <associate|send-trace|<tuple|5|7>>
   </collection>
 </references>
 
@@ -1004,10 +1012,10 @@
 
       <with|par-left|<quote|1tab>|2.2<space|2spc>The \Pkernel_flow\Q article
       in the official Linux Fundation Documentation<assign|footnote-nr|2><hidden|<tuple>><\float|footnote|>
-        <with|font-size|<quote|0.771>|<with|par-mode|<quote|justify>|par-left|<quote|0cm>|par-right|<quote|0cm>|font-shape|<quote|right>|dummy|<quote|<macro|<tex-footnote-sep>>>|dummy|<quote|<macro|<tex-footnote-tm-barlen>>>|<\surround|<locus|<id|%3FB69D8-4A1BF48>|<link|hyperlink|<id|%3FB69D8-4A1BF48>|<url|#footnr-2>>|2>.
+        <with|font-size|<quote|0.771>|<with|par-mode|<quote|justify>|par-left|<quote|0cm>|par-right|<quote|0cm>|font-shape|<quote|right>|dummy|<quote|<macro|<tex-footnote-sep>>>|dummy|<quote|<macro|<tex-footnote-tm-barlen>>>|<\surround|<locus|<id|%3A9C048-45007A0>|<link|hyperlink|<id|%3A9C048-45007A0>|<url|#footnr-2>>|2>.
         |<hidden|<tuple|footnote-2>><htab|0fn|first>>
           See: http://www.linuxfoundation.org/collaborate/workgroups/networking/kernel_flow
-          or use <locus|<id|%3FB69D8-4A1BEA0>|<link|hyperlink|<id|%3FB69D8-4A1BEA0>|<url|http://www.linuxfoundation.org/collaborate/workgroups/networking/kernel_flow>>|pdf-href>
+          or use <locus|<id|%3A9C048-4501A48>|<link|hyperlink|<id|%3A9C048-4501A48>|<url|http://www.linuxfoundation.org/collaborate/workgroups/networking/kernel_flow>>|pdf-href>
         </surround>>>
       </float><space|0spc><rsup|<with|font-shape|<quote|right>|<reference|footnote-2>>>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
@@ -1037,49 +1045,53 @@
       other Measurment Methods <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-14>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|4<space|2spc>Measurment
-      and Results> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|4<space|2spc>Test
+      Setup and Results> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-15><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|4.1<space|2spc>Test Setup
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-16>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Results>
+      <with|par-left|<quote|1tab>|4.2<space|2spc>Test results
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-17><vspace|0.5fn>
+      <no-break><pageref|auto-17>>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Evaluation
+      and Discussion of the Results> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-20><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|5.1<space|2spc>Send Flow
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-20>>
+      <no-break><pageref|auto-21>>
 
       <with|par-left|<quote|2tab>|5.1.1<space|2spc>Syscalls and Kernel Entry
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-21>>
+      <no-break><pageref|auto-22>>
 
       <with|par-left|<quote|2tab>|5.1.2<space|2spc>In Kernel Flow
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-22>>
+      <no-break><pageref|auto-23>>
 
       <with|par-left|<quote|1tab>|5.2<space|2spc>Recieve Flow
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-23>>
+      <no-break><pageref|auto-24>>
 
       <with|par-left|<quote|2tab>|5.2.1<space|2spc>Syscalls and Kernel Entry
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-24>>
+      <no-break><pageref|auto-25>>
 
       <with|par-left|<quote|2tab>|5.2.2<space|2spc>In Kernel Flow
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-25>>
+      <no-break><pageref|auto-26>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|6<space|2spc>Conclusion>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-26><vspace|0.5fn>
+      <no-break><pageref|auto-27><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Bibliography>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-27><vspace|0.5fn>
+      <no-break><pageref|auto-28><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
