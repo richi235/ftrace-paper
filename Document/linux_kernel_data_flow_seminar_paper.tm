@@ -74,7 +74,23 @@
 
   \;
 
-  <abstract-data|<abstract|TODO>>
+  <abstract-data|<\abstract>
+    Books on Linux kernel programming grow old quite fast since the Linux
+    Kernel is a very active project. Additionaly most of them are quite
+    expensive or dificult to obtain, and have either a quite broad or very
+    focused character, making them less valuable for a aspiring and learning
+    kernel developer.
+
+    This seminar paper outlines the usage of ftrace a tracing framework to
+    analyse a running Linux system. Having obtained a tracelog a kernel
+    hacker can read and understand source code more determined and with
+    context.
+
+    In a detailed example this approach is demonstrated in tracing and the
+    way of data in a TCP Connection through the kernel. Finally this tracelog
+    is used as base for more a exact conceptual exploration and description
+    of the Linux TCP/IP implemention.\ 
+  </abstract>>
 
   Copyright <copyright> 2016 Richard Sailer.\ 
 
