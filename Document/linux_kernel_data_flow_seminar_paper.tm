@@ -613,18 +613,11 @@
 
   <em|ip-and-netfilter-processing:> This happens between
   <verbatim|ip_queue_xmit()> and <verbatim|ip_finish_output2()>. Here several
-  things happen:
-
-  <\enumerate>
-    <item>The IP packet and header is built
-
-    <item>The routing decision is made
-
-    <item>Firewall and forwarding rules of netfilter are applied (This
-    happens in <verbatim|nf_hook_slow()> and involves many function calls,
-    most of them where cut out because netfilter is beyond the scope of this
-    work).
-  </enumerate>
+  things happen: (1) The IP packet and header is built, (2) The routing
+  decision is made, (3) Firewall and forwarding rules of netfilter are
+  applied (This happens in <verbatim|nf_hook_slow()> and involves many
+  function calls, most of them where cut out because netfilter is beyond the
+  scope of this work).
 
   <em|ethernet-and-driver-processing:> This happens between
   <verbatim|ip_finish_output2()> and <verbatim|e1000_xmit_frame()>. At first
@@ -645,7 +638,7 @@
   recieved. Here the <em|Retransmission Timout> (<em|RTO>) and the
   <em|Congestion Window> (cwnd) get adjusted according to the succesfull
   transmission, for details of the TCP logic see the TCP section of
-  <cite|tanenbaum2003computer>. At least the filesystem is notified since on
+  <cite|tanenbaum2003computer>. At last the filesystem is notified since on
   linux there exists an inode for every tcp-socket (in a own namespace tough)
   through which managment info can be read, which has to be kept up to date.
 
@@ -942,19 +935,19 @@
     <associate|auto-11|<tuple|3|5>>
     <associate|auto-12|<tuple|3.1.3|5>>
     <associate|auto-13|<tuple|4|5>>
-    <associate|auto-14|<tuple|3.2|5>>
-    <associate|auto-15|<tuple|4|5>>
-    <associate|auto-16|<tuple|4.1|5>>
-    <associate|auto-17|<tuple|4.2|6>>
-    <associate|auto-18|<tuple|5|7>>
-    <associate|auto-19|<tuple|6|7>>
+    <associate|auto-14|<tuple|4|5>>
+    <associate|auto-15|<tuple|4.1|5>>
+    <associate|auto-16|<tuple|4.2|5>>
+    <associate|auto-17|<tuple|5|6>>
+    <associate|auto-18|<tuple|6|7>>
+    <associate|auto-19|<tuple|5|7>>
     <associate|auto-2|<tuple|2|3>>
-    <associate|auto-20|<tuple|5|8>>
-    <associate|auto-21|<tuple|5.1|8>>
-    <associate|auto-22|<tuple|5.2|9>>
-    <associate|auto-23|<tuple|6|9>>
+    <associate|auto-20|<tuple|5.1|8>>
+    <associate|auto-21|<tuple|5.2|8>>
+    <associate|auto-22|<tuple|6|9>>
+    <associate|auto-23|<tuple|8|9>>
     <associate|auto-24|<tuple|8|10>>
-    <associate|auto-25|<tuple|6|8>>
+    <associate|auto-25|<tuple|8|8>>
     <associate|auto-26|<tuple|9|8>>
     <associate|auto-27|<tuple|6|8>>
     <associate|auto-28|<tuple|9|10>>
@@ -1075,10 +1068,10 @@
 
       <with|par-left|<quote|1tab>|2.2<space|2spc>The \Pkernel_flow\Q article
       in the official Linux Foundation Documentation<assign|footnote-nr|2><hidden|<tuple>><\float|footnote|>
-        <with|font-size|<quote|0.771>|<with|par-mode|<quote|justify>|par-left|<quote|0cm>|par-right|<quote|0cm>|font-shape|<quote|right>|dummy|<quote|<macro|<tex-footnote-sep>>>|dummy|<quote|<macro|<tex-footnote-tm-barlen>>>|<\surround|<locus|<id|%3A9C048-45007A0>|<link|hyperlink|<id|%3A9C048-45007A0>|<url|#footnr-2>>|2>.
+        <with|font-size|<quote|0.771>|<with|par-mode|<quote|justify>|par-left|<quote|0cm>|par-right|<quote|0cm>|font-shape|<quote|right>|dummy|<quote|<macro|<tex-footnote-sep>>>|dummy|<quote|<macro|<tex-footnote-tm-barlen>>>|<\surround|<locus|<id|%722EF68-45007A0>|<link|hyperlink|<id|%722EF68-45007A0>|<url|#footnr-2>>|2>.
         |<hidden|<tuple|footnote-2>><htab|0fn|first>>
           See: http://www.linuxfoundation.org/collaborate/workgroups/networking/kernel_flow
-          or use <locus|<id|%3A9C048-4501A48>|<link|hyperlink|<id|%3A9C048-4501A48>|<url|http://www.linuxfoundation.org/collaborate/workgroups/networking/kernel_flow>>|pdf-href>
+          or use <locus|<id|%722EF68-4501A48>|<link|hyperlink|<id|%722EF68-4501A48>|<url|http://www.linuxfoundation.org/collaborate/workgroups/networking/kernel_flow>>|pdf-href>
         </surround>>>
       </float><space|0spc><rsup|<with|font-shape|<quote|right>|<reference|footnote-2>>>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
