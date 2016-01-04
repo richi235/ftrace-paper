@@ -329,7 +329,7 @@
   does using strace.\ 
 
   The receive sequence consisted of 37 function calls and 56 lines which is
-  small enough to print the complete trace in this document. Contrastingly
+  small enough to include the complete trace in this document. Contrastingly
   the send sequence comprised 510 lines, so shortening got necessary. The
   shortening included removing most of the locking and mutex function calls.
   Also many cases in which <verbatim|function()> , did some locking and then
