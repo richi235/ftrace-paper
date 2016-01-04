@@ -92,10 +92,10 @@
   even common C libraries are not accessible in kernel code, actually no C
   libraries at all is available in kernel space<cite|love2010linux>.\ 
 
-  Aditionally the kernel is a complex piece of software consisting of many
+  Additionally the kernel is a complex piece of software consisting of many
   modules working together in non-trivial ways. To change or extend a part of
   the kernel semantic knowledge on how and why this parts work together is
-  necesarry.
+  necessary.
 
   While the first two obstacles, the often unfamiliar C programming language
   and the lack of libraries, can be overcome with some experience and get
@@ -108,23 +108,23 @@
   <\enumerate>
     <item>They grow old very fast
 
-    Or put another way: The linux kernel evolves too fast. For example
+    Or put another way: The Linux kernel evolves too fast. For example
     <name|Understanding Linux Network Internals> by Christian
     Benvenuti<cite|benvenuti2006>, a really comprehensive books, was written
-    in 2006 covering linux kernel 2.6. Since it took some time writing some
-    examples and parts cover even older parts, like the bottom halve interupt
-    handling. Many details in the tcp stack or the interupt handling have
-    changed since. At the time of writing the current version of the linux
-    kernel is 4.3
+    in 2006 covering Linux kernel 2.6. Since it took some time writing some
+    examples and parts cover even older parts, like the bottom halve
+    interrupt handling. Many details in the TCP stack or the interrupt
+    handling have changed since. At the time of writing the current version
+    of the Linux kernel is 4.3
 
     <item>They have a certain focus and do preselection of content
 
-    Since the linux kernel is a very large project consisting of over 19
+    Since the Linux kernel is a very large project consisting of over 19
     Million lines of code<\footnote>
       Version 4.1, see http://www.phoronix.com/scan.php?page=news_item&px=Linux-19.5M-Stats
       for details.
-    </footnote> obviously a preselection is necesarry even if the author is
-    focussing on a subsystem. For example in \PLinux Kernel Networking\Q by
+    </footnote> obviously a preselection is necessary even if the author is
+    focusing on a subsystem. For example in \PLinux Kernel Networking\Q by
     Rami Rosen<cite|rosen2013linux> TCP is covered quite brief since the
     lower networking layers get a much deeper coverage.
 
@@ -132,35 +132,35 @@
 
     Most of these books have to be purchased and ordered. Some of them are
     quite expensive and ordering them can take several days. These two facts
-    make it more difficult for interested programmers to start linux kernel
+    make it more difficult for interested programmers to start Linux kernel
     programming.
   </enumerate>
 
   This seminar paper tries to solve two of these three issues. In this paper
   we will try to provide an free (licensed under the GNU Free Documentation
   License) and up to date overview of one very specific topic: The Way of
-  Data in a TCP Connection through the Linux kernel. Aditionally we will
+  Data in a TCP Connection through the Linux kernel. Additionally we will
   introduce and explain the method used to examine and understand these
   kernel mechanics in order to give every reader a tool helpful in
   understanding other parts of the kernel his or herself.
 
   <section|State of Research and Related Work>
 
-  There are several papers and linux kernel documentation documents covering
-  related or similiar topics. This section tries to list the most important
-  ones and will explain the similiarities and differences in scope, focus,
-  and other aspects compared to this seminar paper.
+  There are several papers and Linux kernel documentation documents covering
+  related or similar topics. This section tries to list the most important
+  ones and will explain the similarities and differences in scope, focus, and
+  other aspects compared to this seminar paper.
 
   <subsection|The performance analysis of Linux networking--packet
   receiving<cite|wu2007performance>>
 
   This work done in 2006 by Wenji Wu and Matt Crawford from the fermilab in
-  Illinois, USA focuses entirely on the packet recieve process and
+  Illinois, USA focuses entirely on the packet receive process and
   performance issues. While providing many valuable insights for performance
   engineering and answering some on the \Ptracing the way of data\Q questions
   on this work it barely covers the \Pwhich function are involved and what
   are they doing\Q-question, which is part of the focus in this work, since
-  their primary target was performance optimization. Also it contains the
+  their primary target was performance optimisation. Also it contains the
   following diagram of the buffer structure, which is quite helpful for
   getting an overview and context for the results of the next chapters:
 
@@ -170,22 +170,22 @@
   The 2 Buffers shown in Figure <reference|fig_buffers> will appear again in
   the results section.
 
-  <subsection|The \Pkernel_flow\Q article in the official Linux Fundation
+  <subsection|The \Pkernel_flow\Q article in the official Linux Foundation
   Documentation<\footnote>
     See: http://www.linuxfoundation.org/collaborate/workgroups/networking/kernel_flow
     or use <hlink|pdf-href|http://www.linuxfoundation.org/collaborate/workgroups/networking/kernel_flow>
   </footnote>>
 
-  In 2009 the linux foundation realeased this documentation for the linux
+  In 2009 the Linux foundation released this documentation for the Linux
   kernel networking stack together with a quite tall and comprehensive
   diagram (which for layouting and scope reasons is not included in this
   paper). With a size of 3489x1952 pixels even on a full HD monitor it's not
   possible to look at the full diagram. Besides it suffers from \Pputting
   absolutely everything in one picture\Q which makes it difficult to get an
-  overview. While beeing an primary and valuable source for this work it was
-  a goal of this paper to produce an up-to-date and simplified version of
-  this diagram as poster. Simplified in this case means, split into two
-  distinct diagrams one for the receive path and one for the send path.
+  overview. While being an primary and valuable source for this work it was a
+  goal of this paper to produce an up-to-date and simplified version of this
+  diagram as poster. Simplified in this case means, split into two distinct
+  diagrams one for the receive path and one for the send path.
 
   <section|About the Measuring Method: ftrace>
 
@@ -193,14 +193,14 @@
 
   <subsubsection|What is tracing and ftrace>
 
-  Ftrace is a kernel-builtin tracer for function calls and events inside the
-  linux kernel.<cite|ftrace-linux>
+  Ftrace is a kernel-built-in tracer for function calls and events inside the
+  Linux kernel.<cite|ftrace-linux>
 
   <\definition*>
     tracer (software engineering) <cite|Kraft1911>
 
-    A tracer is a tool for analyzing the behaviour of a given software at
-    runtime. It provides an output similiar to an log of what happens inside
+    A tracer is a tool for analysing the behaviour of a given software at
+    runtime. It provides an output similar to an log of what happens inside
     the program. In most cases this output is an sequential structured list
     of all function calls which happened during execution. But there also
     exist other kinds of tracing like events tracing or I/O tracing. For
@@ -213,32 +213,32 @@
   \;
 
   In the case of ftrace the tracing support is part of the software, the
-  linux kernel. On most architectures ftrace uses hardware support for better
+  Linux kernel. On most architectures ftrace uses hardware support for better
   performance.<cite|ftrace-design-linux>
 
   <subsubsection|A Short Overview of ftrace Capabilities and Usage>
 
-  ftrace is used and configured via the <em|debugfs> virtual filesystem. With
-  the following shell command <em|debugfs> is made available:
+  ftrace is used and configured via the <em|debugfs> virtual file-system.
+  With the following shell command <em|debugfs> is made available:
 
-  Ftrace can be used via the <em|trace-cmd> programm. <em|trace-cmd> is
-  packad and available in all big linux distributions.<\footnote>
+  Ftrace can be used via the <em|trace-cmd> program. <em|trace-cmd> is
+  packaged and available in all big Linux distributions.<\footnote>
     At the time of this writing (03.01.2016) <em|trace-cmd> is available in
     Ubuntu (since 12.04), Debian testing and stable and Fedora.
   </footnote> Since tracing in kernel operation is still a quite major
   intervention into a running system only the root user is allowed to use
   trace-cmd, so all the following examples have to be executed as root.
 
-  To simply start recording all the function calls happening in the linux
+  To simply start recording all the function calls happening in the Linux
   without any filtering use:
 
   <big-figure|<verbatim|trace-cmd record -p function_graph >|Example: Start
-  tracing of all function calls in linux kernel>
+  tracing of all function calls in Linux kernel>
 
   This writes all the results into a trace.dat in your working directory.
-  <verbatim|record> is one of the several subcommands of trace-cmd, in our
-  examples and later measurments only the <verbatim|record> and the
-  <verbatim|report> subcommands are needed. You shouldn't run this command
+  <verbatim|record> is one of the several sub-commands of trace-cmd, in our
+  examples and later measurements only the <verbatim|record> and the
+  <verbatim|report> sub-commands are needed. You shouldn't't run this command
   (in the unfiltered version) too long, since it produces quite big files,
   about 900 MB after 30 seconds of tracing appeared in all tests using
   unfiltered tracing.
@@ -247,17 +247,17 @@
   format use:\ 
 
   <big-figure|<verbatim|trace-cmd report \<gtr\> results>|Converting the
-  Results into an humen readable format.>
+  Results into an human readable format.>
 
-  The report subcommands automatically uses the trace.dat file in the working
-  directory and writes it's content to STDOUT which the redirection operator
-  redirects to the <verbatim|results> file.
+  The report sub-commands automatically uses the trace.dat file in the
+  working directory and writes it's content to STDOUT which the redirection
+  operator redirects to the <verbatim|results> file.
 
   The human readable output contains several columns about: the name of the
   process on behalf of the in kernel function call happened, the id of the
-  CPU, an absolute timestamp, info if it's a function exit or entry event,
+  CPU, an absolute time stamp, info if it's a function exit or entry event,
   the time the function needed (most below one micro-second) and the function
-  name. The function names are graphically indentend to display the call
+  name. The function names are graphically indented to display the call
   hierarchy, so if <em|B> is called by <em|A>, \ <em|B> is indented relative
   to <em|A> by 2 spaces.
 
@@ -265,34 +265,34 @@
   see in these paper, some of these columns were removed for layouting
   reasons.
 
-  <subsubsection|Filtering>For analyzing the way of data of a TCP connection
+  <subsubsection|Filtering>For analysing the way of data of a TCP connection
   we do not need information of all functions called in the overall kernel.
-  We're only interested in traceing of the function calls happening on behalf
+  We're only interested in tracing of the function calls happening on behalf
   of one single application. Kernel side filtering after a specific pid is
   possible using:
 
   \;
 
   <big-figure|<verbatim|trace-cmd -p function_graph -P
-  \<less\>pid\<gtr\>>|Tracing all in-kernel function callls happening on
+  \<less\>pid\<gtr\>>|Tracing all in-kernel function calls happening on
   behalf of \<less\>pid\<gtr\>>
 
   This way, the log file sizes are much smaller and more focused than
-  previously. Tracing netcat for some time, while sending and recieving 3
+  previously. Tracing netcat for some time, while sending and receiving 3
   small text messages produced a trace log file of 2,3 MB.
 
-  <subsection|Why ftrace? Comparison to other Measurment Methods>
+  <subsection|Why ftrace? Comparison to other Measurement Methods>
 
   Why did we choose ftrace? There are several tools for analysing and
-  understing what happens inside the linux kernel.\ 
+  understanding what happens inside the Linux kernel.\ 
 
   <section|Test Setup and Results>
 
   <subsection|Test Setup>
 
-  To produce measurable network traffic the <em|BSD netcat> programm has been
-  used. Netcat is a small unix command line programm which opens a TCP (or
-  UDP or Unix Domain) Socket, either as listening socket, or as \Pclient\Q to
+  To produce measurable network traffic the <em|BSD netcat> program has been
+  used. Netcat is a small Unix command line program which opens a TCP (or UDP
+  or Unix Domain) Socket, either as listening socket, or as \Pclient\Q to
   connect to another socket. The IP and Port to connect to (or the port to
   listen on) are supplied as command line parameters. For example:
   <verbatim|nc 17.17.17.17 1055> connects to the IP 17.17.17.17 on port 1055
@@ -300,11 +300,11 @@
   process opens an listening socket on the local machine on port 1055,
   waiting for a IPv4 TCP connection. After establishing a connection netcat
   sends all data it gets from STDIN through the socket and prints all data it
-  recieves through the socket to STDOUT.
+  receives through the socket to STDOUT.
 
-  For this experiment 2 netcat instances were used, one on the measurment
-  computer another on an remote linux server. The command used on the
-  measurment computer was <verbatim|nc -l 1337> and the remote server
+  For this experiment 2 netcat instances were used, one on the measurement
+  computer another on an remote Linux server. The command used on the
+  measurement computer was <verbatim|nc -l 1337> and the remote server
   connected via <verbatim|nc \<less\>ip\<gtr\> 1337>. After the connection
   was established in another terminal tracing was started using:
 
@@ -313,7 +313,7 @@
 
   Then two short messages (strings of 9 Byte and 167 Byte) were sent from the
   measurement computer. Following two messages of equal size were sent from
-  the remote server and recieved by the measurement computer. Finalizing the
+  the remote server and received by the measurement computer. Finalising the
   tracing was stopped and the results translated into a human readable file
   using <verbatim|trace-cmd report>.
 
@@ -321,23 +321,23 @@
 
   Since the full trace of all function calls happening on behalf of netcat
   contained about 3000 lines (which subtracting all the empty lines drawn for
-  the ascii art graph and closing brackets are about 2100 function calls),
-  post editing got necesarry. Most of the function calls involved scheduling,
+  the ASCII art graph and closing brackets are about 2100 function calls),
+  post editing got necessary. Most of the function calls involved scheduling,
   terminal I/O or kernel internal locking of resources, so the sequences
-  belonging to sending or recieving one packet were located and extracted.
+  belonging to sending or receiving one packet were located and extracted.
   This happened by following the <verbatim|SyS_write()> and
   <verbatim|sys_read()> calls, which are the syscalls netcat uses to send and
-  receive packets. This was gathered through traceing all the syscalls netcat
+  receive packets. This was gathered through tracing all the syscalls netcat
   does using strace.\ 
 
   The receive sequence consisted of 37 function calls and 56 lines which is
   small enough to print the complete trace in this document. Contrastingly
-  the send sequence comprised 510 lines, so shortening got necesarry. The
+  the send sequence comprised 510 lines, so shortening got necessary. The
   shortening included removing most of the locking and mutex function calls.
   Also many cases in which <verbatim|function()> , did some locking and then
   called <verbatim|__function()> for doing the internal work were simplified
   by only keeping the <verbatim|function()> call. As a last step, the
-  indentation and superflous columns of both results were removed, so both
+  indentation and superfluous columns of both results were removed, so both
   traces fit into this document side by side.\ 
 
   The final simplified traces are visible in Figure <reference|send-trace>
@@ -588,9 +588,9 @@
 
   <subsection|Send Flow>
 
-  Asuming a TCP connection is already established and we have a socket for
-  sending data in our programm. Before the TCP implementation of the kernel
-  can process and send the data, it has to get the data from userspace, the
+  Assuming a TCP connection is already established and we have a socket for
+  sending data in our program. Before the TCP implementation of the kernel
+  can process and send the data, it has to get the data from user space, the
   next two subsections will cover how this handing over happens and how the
   kernel will process the data.
 
@@ -598,8 +598,8 @@
 
   There are 4<\footnote>
     Actually there are 6, but <verbatim|writev()> and <verbatim|fwrite()> are
-    not mentioned seperately because from a kernel developer point of view
-    they are similiar to the discussed ones. (See main text, below
+    not mentioned separately because from a kernel developer point of view
+    they are similar to the discussed ones. (See main text, below
     enumeration).
   </footnote> syscalls available for sending data through a TCP socket,
   namely:
@@ -624,11 +624,11 @@
 
   <subsubsection|In Kernel Flow>
 
-  <subsection|Recieve Flow>
+  <subsection|Receive Flow>
 
   <subsubsection|Syscalls and Kernel Entry>
 
-  From userspace there are several entry points to the kernel for recieving
+  From user space there are several entry points to the kernel for receiving
   data:
 
   <\with|par-columns|2>
@@ -648,11 +648,11 @@
   <section|Conclusion>
 
   The two goals of this work were reached. This text contains an freely
-  available and up to date overview over the linux TCP networking internals
+  available and up to date overview over the Linux TCP networking internals
   and the ftrace kernel event tracing toolkit. Regarding the third issue, the
   scope, we tried give a quite general scope, covering no part of the TCP
-  stack explicitely (or solely sending/recieving), so every ascending kernel
-  developer gets some general context of the part functioniality he or she
+  stack explicitly (or solely sending/receiving), so every ascending kernel
+  developer gets some general context of the part functionality he or she
   wants to change or improve. Nevertheless TCP Networking is already a quite
   focused topic, so the third issue was not completely solved.
 
@@ -664,10 +664,10 @@
   </footnote><cite|ftrace-linux> But knowing what data a function is using
   (or what pointers to data) is quite important for tracing the way of data.
   So a combined method of using ftrace and looking up function prototypes in
-  the linux source code was employed and worked fairly well.
+  the Linux source code was employed and worked fairly well.
 
   So for generally understanding how these functions work together ftrace and
-  prototype lookup is a reasonable method. But if the goal is fixing errors
+  prototype look-up is a reasonable method. But if the goal is fixing errors
   and knowledge about the concrete values passed to a function get necessary
   other tools like <em|kgdb> and <em|systemtap> are more well-suited.
 
