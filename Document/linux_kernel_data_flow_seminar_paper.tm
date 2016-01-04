@@ -218,11 +218,9 @@
 
   <subsubsection|A Short Overview of ftrace Capabilities and Usage>
 
-  ftrace is used and configured via the <em|debugfs> virtual file-system.
-  With the following shell command <em|debugfs> is made available:
-
-  Ftrace can be used via the <em|trace-cmd> program. <em|trace-cmd> is
-  packaged and available in all big Linux distributions.<\footnote>
+  Ftrace can be used and controled via the <em|trace-cmd> program.
+  <em|trace-cmd> is packaged and available in all big Linux
+  distributions.<\footnote>
     At the time of this writing (03.01.2016) <em|trace-cmd> is available in
     Ubuntu (since 12.04), Debian testing and stable and Fedora.
   </footnote> Since tracing in kernel operation is still a quite major
