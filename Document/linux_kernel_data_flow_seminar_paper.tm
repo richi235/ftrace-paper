@@ -146,10 +146,8 @@
 
   <section|State of Research and Related Work>
 
-  There are several papers and Linux kernel documentation documents covering
-  related or similar topics. This section tries to list the most important
-  ones and will explain the similarities and differences in scope, focus, and
-  other aspects compared to this seminar paper.
+  The following two papers and Linux kernel documentation documents cover
+  relatedtopics.
 
   <subsection|The performance analysis of Linux networking--packet
   receiving<cite|wu2007performance>>
@@ -189,9 +187,7 @@
 
   <section|About the Measuring Method: ftrace>
 
-  <subsection|About ftrace>
-
-  <subsubsection|What is tracing and ftrace>
+  <subsection|About Tracing and Ftrace>
 
   Ftrace is a kernel-built-in tracer for function calls and events inside the
   Linux kernel.<cite|ftrace-linux>
@@ -216,7 +212,7 @@
   Linux kernel. On most architectures ftrace uses hardware support for better
   performance.<cite|ftrace-design-linux>
 
-  <subsubsection|A Short Overview of ftrace Capabilities and Usage>
+  <subsection|A Short Overview of ftrace Capabilities and Usage>
 
   Ftrace can be used and controled via the <em|trace-cmd> program.
   <em|trace-cmd> is packaged and available in all big Linux
@@ -263,13 +259,13 @@
   see in these paper, some of these columns were removed for layouting
   reasons.
 
-  <subsubsection|Filtering>For analysing the way of data of a TCP connection
-  we do not need information of all functions called in the overall kernel.
-  We're only interested in tracing of the function calls happening on behalf
-  of one single application. Kernel side filtering after a specific pid is
-  possible using:
+  <subsection|Filtering>
 
-  \;
+  For analysing the way of data of a TCP connection we do not need
+  information of all functions called in the overall kernel. We're only
+  interested in tracing of the function calls happening on behalf of one
+  single application. Kernel side filtering after a specific pid is possible
+  using:
 
   <big-figure|<verbatim|trace-cmd -p function_graph -P
   \<less\>pid\<gtr\>>|Tracing all in-kernel function calls happening on
@@ -583,8 +579,7 @@
   section we will explain what happens during these function calls, to give
   some overview. If not noted otherwise the source for these descriptions are
   the function definitions in the linux source code in the stable version
-  4.3.1, since the function names in the trace alone did not contain
-  sufficient information.
+  4.3.1.
 
   <subsection|Send Flow>
 
@@ -639,12 +634,8 @@
   <em|Congestion Window> (cwnd) get adjusted according to the succesfull
   transmission, for details of the TCP logic see the TCP section of
   <cite|tanenbaum2003computer>. At last the filesystem is notified since on
-  linux there exists an inode for every tcp-socket (in a own namespace tough)
-  through which managment info can be read, which has to be kept up to date.
-
-  \;
-
-  \;
+  linux there exists an inode for every tcp-socket (in a own namespace
+  tough).
 
   <subsection|Receive Flow>
 
@@ -931,20 +922,20 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|2>>
-    <associate|auto-10|<tuple|2|4>>
-    <associate|auto-11|<tuple|3|5>>
-    <associate|auto-12|<tuple|3.1.3|5>>
+    <associate|auto-10|<tuple|3|4>>
+    <associate|auto-11|<tuple|3.3|5>>
+    <associate|auto-12|<tuple|4|5>>
     <associate|auto-13|<tuple|4|5>>
-    <associate|auto-14|<tuple|4|5>>
-    <associate|auto-15|<tuple|4.1|5>>
-    <associate|auto-16|<tuple|4.2|5>>
-    <associate|auto-17|<tuple|5|6>>
-    <associate|auto-18|<tuple|6|7>>
-    <associate|auto-19|<tuple|5|7>>
+    <associate|auto-14|<tuple|4.1|5>>
+    <associate|auto-15|<tuple|4.2|5>>
+    <associate|auto-16|<tuple|5|5>>
+    <associate|auto-17|<tuple|6|6>>
+    <associate|auto-18|<tuple|5|7>>
+    <associate|auto-19|<tuple|5.1|7>>
     <associate|auto-2|<tuple|2|3>>
-    <associate|auto-20|<tuple|5.1|8>>
-    <associate|auto-21|<tuple|5.2|8>>
-    <associate|auto-22|<tuple|6|9>>
+    <associate|auto-20|<tuple|5.2|8>>
+    <associate|auto-21|<tuple|6|8>>
+    <associate|auto-22|<tuple|8|9>>
     <associate|auto-23|<tuple|8|9>>
     <associate|auto-24|<tuple|8|10>>
     <associate|auto-25|<tuple|8|8>>
@@ -967,8 +958,8 @@
     <associate|auto-5|<tuple|2.2|3>>
     <associate|auto-6|<tuple|3|4>>
     <associate|auto-7|<tuple|3.1|4>>
-    <associate|auto-8|<tuple|3.1.1|4>>
-    <associate|auto-9|<tuple|3.1.2|4>>
+    <associate|auto-8|<tuple|3.2|4>>
+    <associate|auto-9|<tuple|2|4>>
     <associate|bib-Kraft1911|<tuple|3|10>>
     <associate|bib-benvenuti2006|<tuple|1|10>>
     <associate|bib-chimata2005path|<tuple|2|12>>
