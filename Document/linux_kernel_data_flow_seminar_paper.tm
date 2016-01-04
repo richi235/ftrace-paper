@@ -584,14 +584,20 @@
 
   <section|Evaluation and Discussion of the Trace Results>
 
+  Since this trace log alone is only semi-illuminating, in the following
+  section we will explain what happens during these function calls, to give
+  some overview. If not noted otherwise the source for these descriptions are
+  the function definitions in the linux source code in the stable version
+  4.3.1, since the function names in the trace alone did not contain
+  sufficient information.
+
   <subsection|Send Flow>
 
   For a better understanding the whole TCP send sequence can be split up into
   5 sub-sequences which we will cover and explain seperately. The 5 sequences
   are: (1) <em|copy-to-kernelspace>, (2) <em|tcp-processing>, (3)
   <em|ip-and-netfilter-processing>, (4) <em|ethernet-and-driver-processing>,
-  (5) <em|finishing-works>. Each of these sub-sequences will be explained in
-  one paragraph.
+  (5) <em|finishing-works>.
 
   <em|copy-to-kernelspace>: This happens between the invocation of the
   <verbatim|write()>-syscall in the userspace and the in kernel function
